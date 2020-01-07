@@ -12,9 +12,12 @@
   "muc_mention_autocomplete_min_chars": 0,
   "assets_path": "./dist/",
   "clear_messages_on_reconnection": true,
+
   "default_domain": "wikisuite.chat",
+  "domain_placeholder": "wikisuite.chat",   
   "bosh_service_url": "https://wikisuite.chat:7443/http-bind/",
   "websocket_url": "wss://wikisuite.chat:7443/ws/",  
+
   "auto_reconnect": true,
   "roster_groups": true,
   "singleton": false,
@@ -35,6 +38,7 @@
     "audioconf", 
     "fastpath",
     "browsertab",     
+    "location",      
     "pade"
   ],
   "message_carbons": true,
