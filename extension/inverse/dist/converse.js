@@ -24428,7 +24428,8 @@ module.exports = isArray;
 
   // Throw an error when a URL is needed, and none is supplied.
   var urlError = function() {
-    throw new Error('A "url" property or function must be specified');
+    // BAO
+    //throw new Error('A "url" property or function must be specified');
   };
 
   // Wrap an optional error callback with a fallback error event.
@@ -46281,25 +46282,24 @@ Strophe.Connection.prototype = {
 
         // BAO - Interceptor for messages sennt to user@pade.domain to be handled by gateway plugin
 
-        if (elem.nodeTree && typeof elem.nodeTree.getAttribute === "function")
+        function checkForPadeBots(elem, self)
         {
-            const target = elem.nodeTree.getAttribute("to");
-
-            if (target && target.indexOf("pade." + this.domain) > -1)
+            if (elem.outerHTML.indexOf("pade." + self.domain) > -1)
             {
-                if (typeof this.injectedMessage === "function") this.injectedMessage(elem.nodeTree);
-                return;
+                if (typeof self.injectedMessage === "function") self.injectedMessage(elem);
+                return
             }
+            self._queueData(elem);
         }
 
         if (typeof(elem.sort) === "function") {
             for (let i=0; i < elem.length; i++) {
-                this._queueData(elem[i]);
+                checkForPadeBots(elem[i], this);      // BAO
             }
         } else if (typeof(elem.tree) === "function") {
-            this._queueData(elem.tree());
+            checkForPadeBots(elem.tree(), this);      // BAO
         } else {
-            this._queueData(elem);
+            checkForPadeBots(elem, this);             // BAO
         }
         this._proto._send();
     },
@@ -59837,6 +59837,12 @@ converse_core.plugins.add('converse-mam', {
               stanza.c('field', {
                 'var': 'with'
               }).c('value').t(options['with']).up().up();
+            }
+
+            if (options['search']) {    // BAO
+              stanza.c('field', {
+                'var': 'urn:example:xmpp:free-text-search'
+              }).c('value').t(options['search']).up().up();
             }
 
             ['start', 'end'].forEach(t => {

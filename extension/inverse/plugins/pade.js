@@ -147,24 +147,36 @@
                     var numUnreadBox = chatbox.get("num_unread");
                     var numUnreadRoom = chatbox.get("num_unread_general");
 
-                    if (document.hasFocus())
+                    if (document.hasFocus() || notified)
                     {
                         chrome.browserAction.setBadgeBackgroundColor({ color: '#0000e1' });
                         chrome.browserAction.setBadgeText({ text: "" });
                     }
                     else {
 
-                        if (!notified)
+                        if (bgWindow)
                         {
                             chrome.windows.update(bgWindow.pade.chatWindow.id, {drawAttention: true});
+                            let count = 0;
 
-                            if (bgWindow)
+                            _converse.chatboxes.each(function (chat_box)
                             {
-                                if (!bgWindow.pade.messageCount) bgWindow.pade.messageCount = 0;
-                                bgWindow.pade.messageCount++;
+                                if (chat_box.get("type") == "chatbox")
+                                {
+                                    count = count + chat_box.get("num_unread");
+                                }
+                                else
 
+                                if (chat_box.get("type") == "chatroom")
+                                {
+                                    count = count + chat_box.get("num_unread_general");
+                                }
+                            });
+
+                            if (count > 0)
+                            {
                                 chrome.browserAction.setBadgeBackgroundColor({ color: '#0000e1' });
-                                chrome.browserAction.setBadgeText({ text: bgWindow.pade.messageCount.toString() });
+                                chrome.browserAction.setBadgeText({ text: count.toString() });
                             }
                         }
                     }
@@ -844,7 +856,7 @@
         const jid = ev.target.getAttribute('data-room-jid');
         const nick = ev.target.getAttribute('data-room-nick');
 
-        if (jid && converse.env.Strophe.getNodeFromJid(jid) && _converse.bare_jid != jid)
+        if (jid && _converse.bare_jid != jid)
         {
              _converse.api.chats.open(jid, {nickname: nick, fullname: nick}).then(chat => {
                  if (!chat.vcard.attributes.fullname) chat.vcard.set('fullname', nick);
@@ -860,23 +872,7 @@
 
         if (element)
         {
-            const status = element.querySelector(".occupant-status");
-            let imgEle = element.querySelector(".occupant-avatar");
-            const image = createAvatar(occupant.get('nick'));
-            const imgHtml = '<img data-room-nick="' + occupant.get('nick') + '" data-room-jid="' + occupant.get('jid') + '" class="room-avatar avatar" src="' + image + '" height="22" width="22">';
-
-            if (imgEle)
-            {
-                imgEle.innerHTML = imgHtml;
-            }
-            else {
-                imgEle = __newElement('span', null, imgHtml, 'occupant-avatar');
-                status.insertAdjacentElement('beforeBegin', imgEle);
-            }
-
-            const myJid = Strophe.getBareJidFromJid(_converse.connection.jid);
-
-            if (occupant.get('jid') && myJid != occupant.get('jid'))
+            if (occupant.get('jid') && _converse.bare_jid != occupant.get('jid'))
             {
                 const badges = element.querySelector(".occupant-badges");
                 let padeEle = element.querySelector(".occupants-pade-chat");
