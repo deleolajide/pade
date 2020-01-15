@@ -375,6 +375,7 @@ function doConverse(server, username, password, anonUser)
     {
         var domain = getSetting("domain", null);
         var displayname = getSetting("displayname", username);
+        var myName = getSetting("autoCreateNickname", false) ? username : displayname
 
         var autoJoinRooms = undefined;
         var autoJoinPrivateChats = undefined;
@@ -480,7 +481,8 @@ function doConverse(server, username, password, anonUser)
           muc_show_join_leave: getSetting("showGroupChatStatusMessages", true),
           muc_show_join_leave_status: getSetting("showGroupChatStatusMessages", true),
           muc_mention_autocomplete_filter: getSetting("converseAutoCompleteFilter", "starts_with"),
-          nickname: getSetting("autoCreateNickname", false) ? username : displayname,
+          nickname: myName,
+          fullname: myName,
           notification_icon: '../image.png',
           notify_all_room_messages: getSetting("notifyAllRoomMessages", false),
           password: anonUser ? null : password,
@@ -782,7 +784,7 @@ function createAvatar(nickname, width, height, font, force)
 
 function __newElement(el, id, html, className)
 {
-    var ele = document.createElement(el);
+    const ele = document.createElement(el);
     if (id) ele.id = id;
     if (html) ele.innerHTML = html;
     if (className) ele.classList.add(className);
@@ -790,20 +792,19 @@ function __newElement(el, id, html, className)
     return ele;
 }
 
-function addToolbarItem(view, id, label, html)
+function addToolbarItem (view, id, label, html)
 {
-    if (getSetting("showToolbarIcons", true) || label == "webmeet-scrolldown-" + id || label == "webmeet-trash-" + id || label == "webmeet-refresh-" + id || label == "webmeet-notepad-" + id)
-    {
-        var placeHolder = view.el.querySelector('#place-holder');
+    let placeHolder = view.el.querySelector('#place-holder');
 
-        if (!placeHolder)
-        {
-            const toolbar = view.el.querySelector('.chat-toolbar');
-            toolbar.appendChild(__newElement('li', 'place-holder'));
-            placeHolder = view.el.querySelector('#place-holder');
-        }
-        placeHolder.insertAdjacentElement('afterEnd', __newElement('li', label, html));
+    if (!placeHolder)
+    {
+        const toolbar = view.el.querySelector('.chat-toolbar');
+        toolbar.appendChild(__newElement('li', 'place-holder'));
+        placeHolder = view.el.querySelector('#place-holder');
     }
+    const newEle = __newElement('li', label, html);
+    placeHolder.insertAdjacentElement('afterEnd', newEle);
+    return newEle;
 }
 
 function occupantAvatarClicked(ev, view)
