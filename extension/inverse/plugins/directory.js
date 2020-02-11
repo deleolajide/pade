@@ -112,6 +112,8 @@
 
             _converse.api.listen.on('renderToolbar', function(view)
             {
+                console.debug('directory - renderToolbar', view.model);
+
                 if (!view.el.querySelector(".fa-male"))
                 {
                     var id = view.model.get("box_id");
@@ -149,6 +151,9 @@
                         if (!directoryDialog)
                         {
                             directoryDialog = new DirectoryDialog({ 'model': new converse.env.Backbone.Model({query: match[2]}) });
+                        }
+                        else {
+                            directoryDialog.model.set("query", match[2]);
                         }
                         directoryDialog.show();
                         return true;

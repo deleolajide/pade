@@ -21,7 +21,7 @@
 
             _converse.api.settings.update({
                 search_max: 999,
-                search_free_text_search: false
+                search_free_text_search: true
             });
 
             SearchDialog = _converse.BootstrapModal.extend({
@@ -166,7 +166,7 @@
                     _converse.api.archive.query({to: jid, start: start, end: end, before: '', search: keyword, max: _converse.api.settings.get("search_max"), 'groupchat': groupchat, 'with': participant}).then(function(result)
                     {
                         const messages = result.messages;
-                        let html = "<div class='row'><div style='max-width: 20%;' class='col'><b>Date</b></div><div style='max-width: 15%;' class='col'><b>Participant</b></div><div class='col'><b>Message</b></div></div>";
+                        let html = "<div class='row'><div style='max-width: 20%;' class='col'><b>Date</b></div><div style='max-width: 15%;' class='col'><b>Person</b></div><div class='col'><b>Message</b></div></div>";
                         let ids = [];
 
                         for (let i=0; i<messages.length; i++)
@@ -186,7 +186,7 @@
                                     const pretty_time = dayjs(time).format('MMM DD HH:mm:ss');
                                     const pretty_from = type === "chatroom" ? from.split("/")[1] : from.split("@")[0];
 
-                                    if (keyword == "" || _converse.api.settings.get("search_free_text_search") || searchRegExp.test(body))
+                                    if ((keyword == "" || _converse.api.settings.get("search_free_text_search")) && searchRegExp.test(body))
                                     {
                                         const id = originId ? originId.getAttribute('id') : stanzaId.getAttribute('id');
                                         ids.push(id);
@@ -224,6 +224,8 @@
                 const id = view.model.get("box_id");
                 const search = addToolbarItem(view, id, "pade-search-" + id, '<a class="plugin-search fa fa-search" title="Search conversations for keywords"></a>');
 
+                console.debug('search - renderToolbar', search, view.model);
+
                 if (search) search.addEventListener('click', function(evt)
                 {
                     evt.stopPropagation();
@@ -231,6 +233,9 @@
                     if (!searchDialog)
                     {
                         searchDialog = new SearchDialog({ 'model': new converse.env.Backbone.Model({view: view}) });
+                    }
+                    else {
+                        searchDialog.model.set("view", view);
                     }
                     searchDialog.show();
                 }, false);
@@ -253,6 +258,11 @@
                         {
                             searchDialog = new SearchDialog({ 'model': new converse.env.Backbone.Model({view: this, keyword: match[2]}) });
                         }
+                        else {
+                            searchDialog.model.set("view", this);
+                            searchDialog.model.set("keyword", match[2]);
+                        }
+
                         searchDialog.show();
                         return true;
                     }

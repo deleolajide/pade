@@ -81,6 +81,22 @@ this.manifest = {
         },
         {
             "tab": i18n.get("Connection"),
+            "group": i18n.get("URIs"),
+            "name": "boshUri",
+            "type": "text",
+            "label": i18n.get("Bosh"),
+            "text": "https://example.com:7443/http-bind/"
+        },
+        {
+            "tab": i18n.get("Connection"),
+            "group": i18n.get("URIs"),
+            "name": "websocketUri",
+            "type": "text",
+            "label": i18n.get("WebSocket"),
+            "text": "wss://example.com:7443/ws/"
+        },
+        {
+            "tab": i18n.get("Connection"),
             "group": i18n.get("Authentication"),
             "name": "restartDesc",
             "type": "description",
@@ -820,7 +836,7 @@ this.manifest = {
             "name": "ofmeetUrl",
             "type": "text",
             "label": i18n.get("Base Url"),
-            "text": "https://server:7443/ofmeet"
+            "text": "https://server:7443/ofmeet/"
         },
         {
             "tab": i18n.get("Meetings"),
@@ -1122,13 +1138,6 @@ this.manifest = {
         {
             "tab": i18n.get("Converse"),
             "group": i18n.get("User Interface"),
-            "name": "enableMessageRetraction",
-            "type": "checkbox",
-            "label": i18n.get("Enable message retraction action")
-        },
-        {
-            "tab": i18n.get("Converse"),
-            "group": i18n.get("User Interface"),
             "name": "showGroupChatStatusMessages",
             "type": "checkbox",
             "label": i18n.get("Show GroupChat Status Messages")
@@ -1160,13 +1169,6 @@ this.manifest = {
             "name": "hideOfflineUsers",
             "type": "checkbox",
             "label": i18n.get("Hide offline users")
-        },
-        {
-            "tab": i18n.get("Converse"),
-            "group": i18n.get("User Interface"),
-            "name": "converseShowOnlyOnlineUsers",
-            "type": "checkbox",
-            "label": i18n.get("Show only users with available presence")
         },
         {
             "tab": i18n.get("Converse"),
@@ -1886,6 +1888,13 @@ this.manifest = {
             "type": "checkbox",
             "label": i18n.get("Enable Audio/Video Capture")
         },
+        {                                       // irma
+            "tab": i18n.get("Applications"),
+            "group": i18n.get("IRMA"),
+            "name": "enableIrma",
+            "type": "checkbox",
+            "label": i18n.get("Enable IRMA (I reveal my attributes)")
+        },
         {                                               // search
             "tab": i18n.get("Search"),
             "group": i18n.get("Rooms Directory"),
@@ -2019,6 +2028,13 @@ this.manifest = {
         {
             "tab": i18n.get("Feeds"),
             "group": i18n.get("RSS/Atom"),
+            "name": "showRssToolbar",
+            "type": "checkbox",
+            "label": i18n.get("Show Chatbox Toolbar")
+        },
+        {
+            "tab": i18n.get("Feeds"),
+            "group": i18n.get("RSS/Atom"),
             "name": "rssFeedTitle",
             "type": "text",
             "label": i18n.get("Title"),
@@ -2142,6 +2158,10 @@ this.manifest = {
             "ofmeetInvitation",
             "letsCollaborate",
             "webinarInvite"
+        ],
+        [
+            "boshUri",
+            "websocketUri"
         ]
     ]
 };

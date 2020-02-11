@@ -65,27 +65,9 @@
                 resetAllMsgCount();
             }
 
-            /* From the `_converse` object you can get any configuration
-             * options that the user might have passed in via
-             * `converse.initialize`.
-             *
-             * You can also specify new configuration settings for this
-             * plugin, or override the default values of existing
-             * configuration settings. This is done like so:
-            */
-
             _converse.api.settings.update({
-
+              'show_client_info': false
             });
-
-            /* The user can then pass in values for the configuration
-             * settings when `converse.initialize` gets called.
-             * For example:
-             *
-             *      converse.initialize({
-             *           "initialize_message": "My plugin has been initialized"
-             *      });
-             */
 
             _converse.on('messageAdded', function (data) {
                 // The message is at `data.message`
@@ -266,10 +248,10 @@
                 }
             });
 
-            _converse.api.listen.on('chatRoomOpened', function (view)
+            _converse.api.listen.on('chatRoomViewInitialized', function (view)
             {
                 const jid = view.model.get("jid");
-                console.debug("chatRoomOpened", view);
+                console.debug("chatRoomViewInitialized", view);
 
                 view.model.occupants.on('add', occupant =>
                 {
@@ -279,7 +261,7 @@
                         anonRoster[occupant.get("jid")] = occupant.get("nick");
                     }
 
-                    setTimeout(function() {extendOccupant(occupant, view)}, 1000);
+                    setTimeout(function() {extendOccupant(occupant, view)}, 500);
                 });
 
                 view.model.occupants.on('remove', occupant =>
@@ -319,13 +301,13 @@
                 }
             });
 
-            _converse.api.listen.on('chatBoxInitialized', function (view)
+            _converse.api.listen.on('chatBoxInsertedIntoDOM', function (view)
             {
-                console.debug("chatBoxInitialized", view.model, anonRoster);
+                console.debug("chatBoxInsertedIntoDOM", view.model, anonRoster);
 
                 const jid = view.model.get("jid");
                 const activeDiv = document.getElementById("active-conversations");
-                console.debug("pade plugin chatBoxInitialized", jid, activeDiv);
+                console.debug("pade plugin chatBoxInsertedIntoDOM", jid, activeDiv);
 
                 if (bgWindow)
                 {
@@ -342,7 +324,7 @@
                         view.model.vcard.set('nickname', nick);
                         view.model.vcard.set('fullname', nick);
 
-                        const dataUri = getSetting("avatar", createAvatar(nick, null, null, null, true));
+                        const dataUri = getSetting("avatar", createAvatar(nick, null, null, null, true, jid));
                         const avatar = dataUri.split(";base64,");
 
                         view.model.vcard.set('image', avatar[1]);
@@ -435,9 +417,10 @@
 
                         var bookmarkRoom = function bookmarkRoom(json)
                         {
-                            var room = _converse.chatboxes.get(json.jid);
+                            const room = _converse.chatboxes.get(json.jid);
+                            const bookmark = _converse.bookmarks.findWhere({'jid': json.jid});
 
-                            if (!room)
+                            if (!bookmark)
                             {
                                 _converse.bookmarks.create({
                                     'jid': json.jid,
@@ -445,10 +428,9 @@
                                     'autojoin': json.autojoin,
                                     'nick': myNick
                                 });
-
-                                room = _converse.chatboxes.get(json.jid);
-                                if (room) room.save('bookmarked', true);
                             }
+
+                            if (room) room.save('bookmarked', true);
                             return room;
                         }
 
@@ -496,6 +478,40 @@
                         }
                     }
 
+                    _converse.api.waitUntil('roomsPanelRendered').then(() => {
+                        const section = document.body.querySelector('.controlbox-section.profile.d-flex');
+                        console.debug("extendControlBox", section);
+
+                        if (section)
+                        {
+                            const viewButton = __newElement('a', null, '<a class="controlbox-heading__btn show-active-conversations fa fa-navicon align-self-center" title="Change view"></a>');
+                            section.appendChild(viewButton);
+
+                            viewButton.addEventListener('click', function(evt)
+                            {
+                                evt.stopPropagation();
+                                handleActiveConversations();
+
+                            }, false);
+
+
+                            if (getSetting("converseSimpleView", false))
+                            {
+                                handleActiveConversations();
+                            }
+
+                            const prefButton = __newElement('a', null, '<a class="controlbox-heading__btn show-preferences fas fa-cog align-self-center" title="Preferences/Settings"></a>');
+                            section.appendChild(prefButton);
+
+                            prefButton.addEventListener('click', function(evt)
+                            {
+                                evt.stopPropagation();
+                                const url = chrome.extension.getURL("options/index.html");
+                                bgWindow.openWebAppsWindow(url, null, 1300, 950);
+
+                            }, false);
+                        }
+                    });
                 });
 
                 _converse.api.waitUntil('controlBoxInitialized').then(() => {
@@ -517,11 +533,6 @@
                             _converse.xmppstatus.vcard.set('image_type', 'image/png');
                         }, 1000);
                     }
-
-                    if (getSetting("converseSimpleView", false))
-                    {
-                        handleActiveConversations();
-                    }
                 });
 
                 console.log("pade plugin is ready");
@@ -534,14 +545,14 @@
 
                 renderChatMessage: async function renderChatMessage()
                 {
-                    //console.debug("renderChatMessage", this.model);
+                    console.debug("renderChatMessage", this.model);
 
                     const body = this.model.get('message');
 
                     if (getSetting("enableThreading", false))
                     {
                         const msgThread = this.model.get('thread');
-                        const source = this.model.get("type") == "groupchat" ? this.model.get("from") : this.model.get("jid");
+                        const source = this.model.get("from");
                         const box_jid = Strophe.getBareJidFromJid(source);
                         const box = _converse.chatboxes.get(box_jid);
 
@@ -605,7 +616,6 @@
 
                     await this.__super__.renderChatMessage.apply(this, arguments);
 
-
                     // action button for quoting, pinning
 
                     var messageDiv = this.el.querySelector('.chat-msg__message');
@@ -641,18 +651,10 @@
                             messageDiv.parentElement.appendChild(messageActionButtons);
                         }
 
-                        if (getSetting("enableMessageRetraction", false) && !messageActionButtons.querySelector('.chat-msg__action-delete') && this.model.get("type") !== 'headline' && !this.model.isMeCommand() && this.model.get('sender') === 'me')
-                        {
-                            var ele = document.createElement("button");
-                            ele.classList.add("chat-msg__action", "chat-msg__action-delete", "far", "fa-trash-alt");
-                            ele.title = "Reract this message";
-                            messageActionButtons.appendChild(ele);
-                        }
-
                         if (!messageActionButtons.querySelector('.chat-msg__action-reply'))
                         {
                             var ele = document.createElement("button");
-                            ele.classList.add("chat-msg__action", "chat-msg__action-reply", "fas", "fa-reply");
+                            ele.classList.add("chat-msg__action", "chat-msg__action-reply", "fas", "fa-reply-all");
                             ele.title = "Reply this message";
                             messageActionButtons.appendChild(ele);
                         }
@@ -872,11 +874,62 @@
 
         if (element)
         {
-            if (occupant.get('jid') && _converse.bare_jid != occupant.get('jid'))
+            // avatar
+
+            const status = element.querySelector(".occupant-status");
+            let imgEle = element.querySelector(".occupant-avatar");
+            const image = createAvatar(occupant.get('nick'), null, null, null, null, occupant.get('jid'));
+            const imgHtml = '<img class="room-avatar avatar" src="' + image + '" height="22" width="22">';
+
+            if (imgEle)
+            {
+                imgEle.innerHTML = imgHtml;
+            }
+            else {
+                imgEle = __newElement('span', null, imgHtml, 'occupant-avatar');
+                status.insertAdjacentElement('beforeBegin', imgEle);
+            }
+
+            if (occupant.get('jid'))
             {
                 const badges = element.querySelector(".occupant-badges");
+
+                // location
+
+                if (bgWindow.pade.geoloc[occupant.get('jid')])
+                {
+                    let locationEle = element.querySelector(".occupants-pade-location");
+                    let locationHtml = "<span data-room-nick='" + occupant.get('nick') + "' data-room-jid='" + occupant.get('jid') + "' title='click to see location' class='badge badge-dark'>GeoLoc</span>";
+
+                    if (locationEle)
+                    {
+                        locationEle.innerHTML = locationHtml;
+                    }
+                    else {
+                        locationEle = __newElement('span', null, locationHtml, 'occupants-pade-location');
+                        badges.appendChild(locationEle);
+                    }
+
+                    locationEle.addEventListener('click', function(evt)
+                    {
+                        evt.stopPropagation();
+
+                        const jid = evt.target.getAttribute('data-room-jid');
+                        const nick = evt.target.getAttribute('data-room-nick');
+                        _converse.pluggable.plugins["webmeet"].showGeolocation(jid, nick, view);
+
+                    }, false);
+                }
+
+                // chat badge
+
                 let padeEle = element.querySelector(".occupants-pade-chat");
-                const html = "<span data-room-nick='" + occupant.get('nick') + "' data-room-jid='" + occupant.get('jid') + "' title='click to chat' class='badge badge-success'>chat</span>";
+                let html = "<span data-room-nick='" + occupant.get('nick') + "' data-room-jid='" + occupant.get('jid') + "' title='click to chat' class='badge badge-success'>chat</span>";
+
+                if (_converse.bare_jid == occupant.get('jid'))
+                {
+                    html = "<span data-room-nick='" + occupant.get('nick') + "' data-room-jid='" + occupant.get('jid') + "' class='badge badge-groupchat'>self</span>";
+                }
 
                 if (padeEle)
                 {
@@ -894,6 +947,9 @@
 
                 }, false);
             }
+        }
+        else {
+            setTimeout(function() {extendOccupant(occupant, view)}, 500);
         }
     }
 

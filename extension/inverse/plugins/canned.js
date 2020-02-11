@@ -153,6 +153,11 @@
         {
             cannedDialog = new CannedDialog({ 'model': new converse.env.Backbone.Model({response: response, responses: responses, textArea: textArea}) });
         }
+        else {
+            cannedDialog.model.set("textArea", textArea);
+            cannedDialog.model.set("response", response);
+            cannedDialog.model.set("responses", responses);
+        }
         cannedDialog.show();
 
         return true;
