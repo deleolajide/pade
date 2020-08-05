@@ -5,7 +5,6 @@
         factory(converse);
     }
 }(this, function (converse) {
-    var bgWindow = chrome.extension ? chrome.extension.getBackgroundPage() : null;
     var rssInterval, htmlTemp = {};
     var Strophe, dayjs
 
@@ -79,7 +78,7 @@
                         var rssFeedCheck = getSetting("rssFeedCheck", 10) * 60000;
                         rssInterval = setInterval(rssRefresh, rssFeedCheck);
 
-                        createRosterEntry("rss@pade." + _converse.connection.domain, getSetting("rssFeedTitle", "RSS Feed"), ["Bots"]);
+                        openChat("rss@pade." + _converse.connection.domain, getSetting("rssFeedTitle", "RSS Feed"), ["Bots"]);
                     }
                 });
             });
@@ -124,36 +123,6 @@
             }
         }
     });
-
-    var createRosterEntry = function(jid, name, groups)
-    {
-        console.debug("createRosterEntry", jid, name, groups);
-
-        if (bgWindow.pade.chatAPIAvailable)
-        {
-            var body = {
-              "jid": jid,
-              "nickname": name,
-              "groups": groups,
-            };
-
-            var url =  "https://" + bgWindow.pade.server + "/rest/api/restapi/v1/meet/friend";
-            var permission =  "Basic " + btoa(bgWindow.pade.username + ":" + bgWindow.pade.password);
-            var options = {method: "POST", headers: {"authorization": permission, "content-type": "application/json"}, body: JSON.stringify(body)};
-
-            console.debug("createRosterEntry", url, options);
-
-            fetch(url, options).then(function(response)
-            {
-                console.debug('createRosterEntry ok');
-                _converse.connection.injectMessage('<presence to="' + _converse.connection.jid + '" from="' + jid + '"/>');
-
-            }).catch(function (err) {
-                console.error('createRosterEntry', err, url, options);
-            });
-        }
-        else openChat(jid, name, groups);
-    }
 
     var rssRefresh = function()
     {
@@ -206,10 +175,10 @@
         {
             if (!rssUrl || rssUrl == "") return;
 
-            // when pade.chat (pwa), use proxy servlet in chat api plugin to fetch feed URL contents and avoid CORS
+            // when pade.chat (pwa), use proxy servlet in pade openfire plugin to fetch feed URL contents and avoid CORS
 
             var feed = {
-                path: chrome.pade ? "https://" + bgWindow.pade.server + "/pade/download?url=" + rssUrl : rssUrl
+                path: chrome.pade ? "https://" + getSetting("server") + "/pade/download?url=" + rssUrl : rssUrl
             }
 
             fetch(feed.path).then(function(response)

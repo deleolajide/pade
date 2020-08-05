@@ -74,13 +74,6 @@ this.manifest = {
         },
         {
             "tab": i18n.get("Connection"),
-            "group": i18n.get("Login"),
-            "name": "status",
-            "text": i18n.get(""),
-            "type": "description"
-        },
-        {
-            "tab": i18n.get("Connection"),
             "group": i18n.get("URIs"),
             "name": "boshUri",
             "type": "text",
@@ -107,7 +100,7 @@ this.manifest = {
             "group": i18n.get("Authentication"),
             "name": "useBasicAuth",
             "type": "checkbox",
-            "label": i18n.get("Use Basic Authentication <b>(requires chat api plugin)</b>")
+            "label": i18n.get("Use Basic Authentication <b>(requires openfire pade plugin)</b>")
         },
         {
             "tab": i18n.get("Connection"),
@@ -126,13 +119,6 @@ this.manifest = {
         {
             "tab": i18n.get("Connection"),
             "group": i18n.get("Authentication"),
-            "name": "useCredsMgrApi",
-            "type": "checkbox",
-            "label": i18n.get("Use Credential Management API.")
-        },
-        {
-            "tab": i18n.get("Connection"),
-            "group": i18n.get("Authentication"),
             "name": "useSmartIdCard",
             "type": "checkbox",
             "label": i18n.get("Use E-Residency Smart ID")
@@ -142,7 +128,7 @@ this.manifest = {
             "group": i18n.get("Authentication"),
             "name": "useSmartIdCardCert",
             "type": "checkbox",
-            "label": i18n.get("Use E-Residency Smart ID Client Certificate <b>(requires chat api plugin)</b>")
+            "label": i18n.get("Use E-Residency Smart ID Client Certificate <b>(requires openfire pade plugin)</b>")
         },
         {
             "tab": i18n.get("Connection"),
@@ -171,20 +157,6 @@ this.manifest = {
             "name": "certificate",
             "type": "button",
             "text": i18n.get("Download")
-        },
-        {
-            "tab": i18n.get("Connection"),
-            "group": i18n.get("Registration"),
-            "name": "register",
-            "type": "button",
-            "text": i18n.get("Register New Account")
-        },
-        {
-            "tab": i18n.get("Connection"),
-            "group": i18n.get("Registration"),
-            "name": "changePassword",
-            "type": "button",
-            "text": i18n.get("Change Password")
         },
         {
             "tab": i18n.get("Connection"),
@@ -548,13 +520,6 @@ this.manifest = {
         {
             "tab": i18n.get("General"),
             "group": i18n.get("URL Protocol Handlers"),
-            "name": "registerMEETProtocol",
-            "type": "checkbox",
-            "label": i18n.get("WEB+MEET: meeting-room - Openfire meeting")
-        },
-        {
-            "tab": i18n.get("General"),
-            "group": i18n.get("URL Protocol Handlers"),
             "name": "registerUrlProtocols",
             "type": "button",
             "text": i18n.get("Register URL Protocols")
@@ -629,20 +594,6 @@ this.manifest = {
         {
             "tab": i18n.get("Meetings"),
             "group": i18n.get("General Settings"),
-            "name": "showOnlyOnlineUsers",
-            "type": "checkbox",
-            "label": i18n.get("Show Only Online Users in browser menu. <b>(This will restart application)</b>")
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
-            "name": "popupWindow",
-            "type": "checkbox",
-            "label": i18n.get("Popup Window")
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
             "name": "showSharedCursor",
             "type": "checkbox",
             "label": i18n.get("Show Shared Cursor")
@@ -692,13 +643,6 @@ this.manifest = {
         {
             "tab": i18n.get("Meetings"),
             "group": i18n.get("General Settings"),
-            "name": "p2pMode",
-            "type": "checkbox",
-            "label": i18n.get("Enable P2P Mode")
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
             "name": "startWithAudioMuted",
             "type": "checkbox",
             "label": i18n.get("Start with Audio Muted")
@@ -720,23 +664,16 @@ this.manifest = {
         {
             "tab": i18n.get("Meetings"),
             "group": i18n.get("General Settings"),
-            "name": "recordAudio",
+            "name": "recordMeeting",
             "type": "checkbox",
-            "label": i18n.get("Record Audio")
+            "label": i18n.get("Record Meeting")
         },
         {
             "tab": i18n.get("Meetings"),
             "group": i18n.get("General Settings"),
-            "name": "recordVideo",
+            "name": "showCaptions",
             "type": "checkbox",
-            "label": i18n.get("Record Audio/Video")
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
-            "name": "postVideoRecordingUrl",
-            "type": "checkbox",
-            "label": i18n.get("Post Audio/Video recording URL to chat")
+            "label": i18n.get("Show text messages as sub-titles/captions on screen")
         },
         {
             "tab": i18n.get("Meetings"),
@@ -848,36 +785,6 @@ this.manifest = {
         {
             "tab": i18n.get("Meetings"),
             "group": i18n.get("General Settings"),
-            "name": "channelLastN",
-            "type": "slider",
-            "label": i18n.get("Maximum Video Streams"),
-            "max": 32,
-            "min": -1,
-            "step": 1
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
-            "name": "startAudioMuted",
-            "type": "slider",
-            "label": i18n.get("Start Audio muted after"),
-            "max": 15,
-            "min": 1,
-            "step": 1
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
-            "name": "startVideoMuted",
-            "type": "slider",
-            "label": i18n.get("Start Video muted after"),
-            "max": 15,
-            "min": 1,
-            "step": 1
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("General Settings"),
             "name": "startBitrate",
             "type": "slider",
             "label": i18n.get("Start Bitrate"),
@@ -892,8 +799,8 @@ this.manifest = {
             "type": "slider",
             "label": i18n.get("Resolution"),
             "max": 1080,
-            "min": 320,
-            "step": 160
+            "min": 324,
+            "step": 108
         },
         {
             "tab": i18n.get("Meetings"),
@@ -911,13 +818,6 @@ this.manifest = {
             "name": "VERTICAL_FILMSTRIP",
             "type": "checkbox",
             "label": i18n.get("Enable Vertical Filmstrip")
-        },
-        {
-            "tab": i18n.get("Meetings"),
-            "group": i18n.get("UI Settings"),
-            "name": "enableCaptions",
-            "type": "checkbox",
-            "label": i18n.get("Show Chat as Captions/Sub-titles")
         },
         {
             "tab": i18n.get("Meetings"),
@@ -949,15 +849,8 @@ this.manifest = {
             "min": 80,
             "step": 10
         },
-        {                                             // converse-inverse
-            "tab": i18n.get("Converse"),
-            "group": i18n.get("General"),
-            "name": "enableInverse",
-            "type": "checkbox",
-            "label": i18n.get("Enable Converse <b>(This will restart application)</b>")
-        },
         {
-            "tab": i18n.get("Converse"),
+            "tab": i18n.get("Converse"),        // converse-inverse
             "group": i18n.get("General"),
             "name": "converseAutoStart",
             "type": "checkbox",
@@ -983,6 +876,13 @@ this.manifest = {
             "name": "converseAutoReOpen",
             "type": "checkbox",
             "label": i18n.get("Auto re-open Converse if it was open after background reconnection")
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("General"),
+            "name": "enableSmacks",
+            "type": "checkbox",
+            "label": i18n.get("Enable Stream Management")
         },
         {
             "tab": i18n.get("Converse"),
@@ -1079,6 +979,17 @@ this.manifest = {
         {
             "tab": i18n.get("Converse"),
             "group": i18n.get("General"),
+            "name": "homePageView",
+            "type": "popupButton",
+            "label": i18n.get("Home Page View Mode"),
+            "options": [
+                {"text": "Full Screen", "value": "fullscreen"},
+                {"text": "Overlayed", "value": "overlayed"}
+            ]
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("General"),
             "name": "converseOpenState",
             "type": "popupButton",
             "label": i18n.get("Window Open presence state"),
@@ -1113,6 +1024,17 @@ this.manifest = {
             "max": 201,
             "min": 1,
             "step": 20
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("Storage"),
+            "name": "conversePersistentStore",
+            "type": "popupButton",
+            "label": i18n.get("Persistent Store"),
+            "options": [
+                {"text": "Local Storage", "value": "localStorage"},
+                {"text": "IndexedDB", "value": "IndexedDB"}
+            ]
         },
         {
             "tab": i18n.get("Converse"),
@@ -1152,13 +1074,6 @@ this.manifest = {
         {
             "tab": i18n.get("Converse"),
             "group": i18n.get("User Interface"),
-            "name": "showGroupChatStatusMessages",
-            "type": "checkbox",
-            "label": i18n.get("Show GroupChat Status Messages")
-        },
-        {
-            "tab": i18n.get("Converse"),
-            "group": i18n.get("User Interface"),
             "name": "converseRandomAvatars",
             "type": "checkbox",
             "label": i18n.get("Use Random Avatars. <b>(requires randomavatar plugin for openfire)</b>")
@@ -1187,9 +1102,16 @@ this.manifest = {
         {
             "tab": i18n.get("Converse"),
             "group": i18n.get("User Interface"),
+            "name": "showWordCloud",
+            "type": "checkbox",
+            "label": i18n.get("Show Word Cloud in Chat Search")
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("User Interface"),
             "name": "showSendButton",
             "type": "checkbox",
-            "label": i18n.get("Show send button which can be clicked to send a message")
+            "label": i18n.get("Show Send button which can be clicked to send a message")
         },
         {
             "tab": i18n.get("Converse"),
@@ -1242,6 +1164,13 @@ this.manifest = {
         {
             "tab": i18n.get("Converse"),
             "group": i18n.get("Private Chat"),
+            "name": "jingleCalls",
+            "type": "checkbox",
+            "label": i18n.get("Enable Jingle Audio/Video Calls")
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("Private Chat"),
             "name": "messageCarbons",
             "type": "checkbox",
             "label": i18n.get("Enable message carbons")
@@ -1281,6 +1210,20 @@ this.manifest = {
             "name": "enableInfoPanel",
             "type": "checkbox",
             "label": i18n.get("Enable Information Panel")
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("Group Chat"),
+            "name": "showGroupChatStatusMessages",
+            "type": "checkbox",
+            "label": i18n.get("Show GroupChat Status Messages")
+        },
+        {
+            "tab": i18n.get("Converse"),
+            "group": i18n.get("Group Chat"),
+            "name": "enableMucDirectory",
+            "type": "checkbox",
+            "label": i18n.get("Enable MUC Room Directory")
         },
         {
             "tab": i18n.get("Converse"),
@@ -1508,15 +1451,8 @@ this.manifest = {
             "type": "description",
             "text": ""
         },
-        {                                       // touchpad
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("TouchPad"),
-            "name": "enableTouchPad",
-            "type": "checkbox",
-            "label": i18n.get("Enable Communicator TouchPad <b>The ofswitch plugin for Openfire is required for this</b>")
-        },
         {
-            "tab": i18n.get("Applications"),
+            "tab": i18n.get("Applications"),    // touchpad
             "group": i18n.get("TouchPad"),
             "name": "useStreamDeck",
             "type": "checkbox",
@@ -1594,41 +1530,6 @@ this.manifest = {
             "type": "text",
             "label": i18n.get("Web Url"),
             "text": i18n.get("https://my_server/tiki"),
-        },
-        {                                       // sip phone
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("Phone"),
-            "name": "sipDescription",
-            "type": "description",
-            "text": i18n.get("SIP Phone. <b>The sip plugin for Openfire is required for this</b>")
-        },
-        {
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("Phone"),
-            "name": "enableSip",
-            "type": "checkbox",
-            "label": i18n.get("Enable CTX SIP Phone <b>(This will restart application)</b>")
-        },
-        {
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("Phone"),
-            "name": "sipAutoStart",
-            "type": "checkbox",
-            "label": i18n.get("Auto Start Phone")
-        },
-        {
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("Phone"),
-            "name": "sipUseOfSwitch",
-            "type": "checkbox",
-            "label": i18n.get("The ofswitch plugin is available")
-        },
-        {
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("Phone"),
-            "name": "enableVerto",
-            "type": "checkbox",
-            "label": i18n.get("Enable Verto Communicator.<b>The ofswitch plugin for Openfire is required for this</b>")
         },
         {                                        // draw.io web apps
             "tab": i18n.get("Applications"),
@@ -1894,13 +1795,6 @@ this.manifest = {
             "type": "text",
             "label": i18n.get("Gmail"),
             "text": i18n.get("Enter list of email accounts"),
-        },
-        {                                       // a/v capture
-            "tab": i18n.get("Applications"),
-            "group": i18n.get("A/V Capture"),
-            "name": "enableAVCapture",
-            "type": "checkbox",
-            "label": i18n.get("Enable Audio/Video Capture")
         },
         {                                       // irma
             "tab": i18n.get("Applications"),
@@ -2176,6 +2070,9 @@ this.manifest = {
         [
             "boshUri",
             "websocketUri"
+        ],
+        [
+            "homePage"
         ]
     ]
 };
@@ -2254,7 +2151,7 @@ if (getSetting("enableFriendships", false))
 
 // TouchPad
 
-if (getSetting("enableTouchPad", false) || getSetting("useStreamDeck", false))
+if (getSetting("useStreamDeck", false))
 {
     for (var p=1; p<6; p++)
     {

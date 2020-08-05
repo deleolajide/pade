@@ -182,7 +182,7 @@
 /******/    __webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/    // __webpack_public_path__
-/******/    __webpack_require__.p = "./dist/";
+/******/    __webpack_require__.p = "./dist/";  // BAO
 /******/
 /******/    // on error function for async loading
 /******/    __webpack_require__.oe = function(err) { console.error(err); throw err; };
@@ -20496,7 +20496,7 @@ module.exports = isObject;
       var base =
         _.result(this, 'urlRoot') ||
         _.result(this.collection, 'url') ||
-        urlError();
+        urlError() || "";   // BAO
       if (this.isNew()) return base;
       var id = this.get(this.idAttribute);
       return base.replace(/[^\/]$/, '$&/') + encodeURIComponent(id);
@@ -31867,12 +31867,12 @@ return __p
 var _ = {escape:__webpack_require__(1)};
 module.exports = function(o) {
 var __t, __p = '', __j = Array.prototype.join;
-function print() { __p += __j.call(arguments, '') }
-__p += '<!-- src/templates/chatbox.html -->\n<div class="flyout box-flyout">\n    <div class="chat-body">\n        <div class="chat-content ';
+function print() { __p += __j.call(arguments, '') } // BAO
+__p += '<!-- src/templates/chatbox.html -->\n<div class="row"><div class="col chat-container"><div class="flyout box-flyout">\n    <div class="chat-body">\n        <div class="chat-content ';
  if (o.show_send_button) { ;
 __p += 'chat-content-sendbutton';
  } ;
-__p += '" aria-live="polite"></div>\n        <div class="bottom-panel">\n            <div class="emoji-picker__container dropup"></div>\n            <div class="message-form-container">\n        </div>\n    </div>\n</div>\n';
+__p += '" aria-live="polite"></div>\n        <div class="bottom-panel">\n            <div class="emoji-picker__container dropup"></div>\n            <div class="message-form-container">\n        </div>\n    </div>\n</div>\n</div></div><div class="col hiddenx jinglecalls"></div></div>';
 return __p
 };
 
@@ -36545,7 +36545,8 @@ __p += '\n    <div class="chat-msg__content chat-msg__content--' +
 __e(o.sender) +
 ' ' +
 __e(o.is_me_message ? 'chat-msg__content--action' : '') +
-'">\n        <span class="chat-msg__heading">\n            ';
+'">\n        ';
+__p += '<span class="chat-msg__heading">\n            ';
  if (o.is_me_message) { ;
 __p += '<time timestamp="' +
 __e(o.isodate) +
@@ -36609,6 +36610,9 @@ __p += '\n                        <div class="chat-msg__subject">' +
 __e( o.subject ) +
 '</div>\n                    ';
  } ;
+ if (o.first_unread) { // BAO
+__p += '<div class="message unread-separator date-separator"><hr class="separator"><span class="separator-text">' + __e(o.__('unread messages')) + '</span></div>\n';
+ };
 __p += '\n                    <div class="chat-msg__text\n                        ';
  if (o.is_only_emojis) { ;
 __p += ' chat-msg__text--larger';
@@ -36618,6 +36622,8 @@ __p += '\n                        ';
 __p += ' spoiler collapsed';
  } ;
 __p += '"><!-- message gets added here via renderMessage --></div>\n                    <div class="chat-msg__media"></div>\n                ';
+// BAO
+__p += '<div class="chat-msg__reactions"></div>\n';
  } ;
 __p += '\n            </div>\n            ';
  if (o.received && !o.is_me_message && !o.is_groupchat_message) { ;
@@ -37137,7 +37143,7 @@ __e(bm.get('jid')) +
 __e(bm.get('jid')) +
 '" title="' +
 __e(o.open_title) + // BAO
-'" href="#"><img class="room-avatar avatar" src="' + createAvatar(bm.get('jid')) + '" height="30" width="30">' +
+'" href="#"><img class="room-avatar avatar" src="' + padeapi.createAvatar(bm.get('jid')) + '" height="30" width="30">' +
 __e(bm.getDisplayName()) +
 '</a>\n            <a class="list-item-action remove-bookmark fa fa-bookmark align-self-center ';
  if (bm.get('bookmarked')) { ;
@@ -37973,7 +37979,7 @@ __p += ' title="' +
 __e(o.jid) +
 '" ';
  } ;
- __p += ' ><img class="room-avatar avatar" src="' + createAvatar(o.jid) + '" height="36" width="36">\n        '; // BAO begins
+ __p += ' ><img class="room-avatar avatar" src="' + padeapi.createAvatar(o.jid) + '" height="36" width="36">\n        '; // BAO begins
   if (o.name && o.name !== o.Strophe.getNodeFromJid(o.jid)) { ;
  __p += '\n            ' +
  __e( o.name ) +
@@ -38500,7 +38506,7 @@ __e(o.jid) +
 __e(o.name) +
 '"\n       title="' +
 __e(o.open_title) + // BAO
-'" href="#"><img class="room-avatar avatar" src="' + createAvatar(o.jid) + '" height="30" width="30">' +
+'" href="#"><img class="room-avatar avatar" src="' + padeapi.createAvatar(o.jid) + '" height="30" width="30">' +
 __e(o.name) +
 '</a>\n    <a class="right room-info icon-room-info"\n       data-room-jid="' +
 __e(o.jid) +
@@ -38942,7 +38948,7 @@ __p += '\n        <a class="list-item-link open-room available-room w-100"\n    
 __e(room.get('jid')) +
 '"\n            title="' +
 __e(o.open_title) + // BAO
-'" href="#"><img class="room-avatar avatar" src="' + createAvatar(room.get('jid')) + '" height="30" width="30">' +
+'" href="#"><img class="room-avatar avatar" src="' + padeapi.createAvatar(room.get('jid')) + '" height="30" width="30">' +
 __e(room.getDisplayName()) +
 '</a>\n\n        ';
  if (o.allow_bookmarks) { ;
@@ -53439,6 +53445,21 @@ const stanza_utils = {
     return {};
   },
 
+  // BAO
+
+  getReactionAttributes(stanza) {
+    const reaction = sizzle_default()("reactions[xmlns=\"".concat(stanza_Strophe.NS.REACTION, "\"]"), stanza).pop();
+
+    if (reaction) {
+      return {
+        'reaction_id': reaction.getAttribute('id'),
+        'reaction_emoji': Object(lodash["get"])(reaction.querySelector('reaction'), 'textContent')
+      };
+    }
+
+    return {};
+  },
+
   getOutOfBandAttributes(stanza) {
     const xform = sizzle_default()("x[xmlns=\"".concat(stanza_Strophe.NS.OUTOFBAND, "\"]"), stanza).pop();
 
@@ -53543,8 +53564,8 @@ const stanza_utils = {
       'subject': Object(lodash["propertyOf"])(stanza.querySelector('subject'))('textContent'),
       'thread': Object(lodash["propertyOf"])(stanza.querySelector('thread'))('textContent'),
       'time': delay ? dayjs_min_default()(delay.getAttribute('stamp')).toISOString() : new Date().toISOString(),
-      'type': stanza.getAttribute('type')
-    }, attrs, stanza_utils.getSenderAttributes(stanza, chatbox, _converse), stanza_utils.getOutOfBandAttributes(stanza), stanza_utils.getMsgAttachAttributes(stanza), stanza_utils.getSpoilerAttributes(stanza), stanza_utils.getCorrectionAttributes(stanza, original_stanza));
+      'type': stanza.getAttribute('type')   // BAO
+    }, attrs, stanza_utils.getSenderAttributes(stanza, chatbox, _converse), stanza_utils.getOutOfBandAttributes(stanza), stanza_utils.getReactionAttributes(stanza), stanza_utils.getMsgAttachAttributes(stanza), stanza_utils.getSpoilerAttributes(stanza), stanza_utils.getCorrectionAttributes(stanza, original_stanza));
     return attrs;
   }
 
@@ -53597,6 +53618,7 @@ converse_core_Strophe.addNamespace('MODERATE', 'urn:xmpp:message-moderate:0');
 converse_core_Strophe.addNamespace('NICK', 'http://jabber.org/protocol/nick');
 converse_core_Strophe.addNamespace('OMEMO', 'eu.siacs.conversations.axolotl');
 converse_core_Strophe.addNamespace('OUTOFBAND', 'jabber:x:oob');
+converse_core_Strophe.addNamespace('REACTION', 'urn:xmpp:reactions:0'); // BAO
 converse_core_Strophe.addNamespace('PUBSUB', 'http://jabber.org/protocol/pubsub');
 converse_core_Strophe.addNamespace('REGISTER', 'jabber:iq:register');
 converse_core_Strophe.addNamespace('RETRACT', 'urn:xmpp:message-retract:0');
@@ -54621,7 +54643,7 @@ converse_core_converse.initialize = async function (settings, callback) {
   // ----------------------
 
  // BAO
-    this.generateResource = () => `/${chrome.i18n.getMessage('manifest_shortExtensionName').toLowerCase()}-converse-${converse_core_converse.VERSION_NAME}-${BrowserDetect.browser + BrowserDetect.version + BrowserDetect.OS}-${Math.floor(Math.random() * 139749528).toString()}`;
+    this.generateResource = () => `/${chrome.i18n.getMessage('manifest_shortExtensionName').toLowerCase()}-${chrome.runtime.getManifest().version}-${converse_core_converse.VERSION_NAME}-${padeapi.getResource()}`;
 
   this.setConnectionStatus = function (connection_status, message) {
     converse_core_converse.connfeedback.set({
@@ -55866,6 +55888,8 @@ converse_core.plugins.add('converse-chat', {
         } else if (!this.handleReceipt(stanza, from_jid, original_stanza) && !this.handleChatMarker(stanza, from_jid)) {
           const attrs = await this.getMessageAttributesFromStanza(stanza, original_stanza);
 
+          this.handleReaction(stanza, original_stanza, attrs);   // BAO issue #9
+
           if (this.handleRetraction(attrs)) {
             return;
           }
@@ -56094,6 +56118,28 @@ converse_core.plugins.add('converse-chat', {
         }
       },
 
+      // BAO issue #9
+
+      handleReaction(stanza, original_stanza, attrs) {
+        const message = this.messages.findWhere({
+            'origin_id': attrs.reaction_id
+        });
+
+        if (message) this.updateReactions(message, attrs.from, attrs.reaction_emoji);
+      },
+
+      // BAO issue #9
+
+      updateReactions(message, from, reaction_emoji) {
+        let reactions = message.get('reactions');
+        if (!reactions) reactions = {};
+        if (!reactions[reaction_emoji]) reactions[reaction_emoji] = [];
+        if (!reactions[reaction_emoji].includes(from)) reactions[reaction_emoji].push(from);
+
+        message.set('reactions', undefined);    // force change event
+        message.save('reactions', reactions);
+      },
+
       /**
        * Handles message retraction based on the passed in attributes.
        * @private
@@ -56274,12 +56320,12 @@ converse_core.plugins.add('converse-chat', {
         return _converse.connection.send(msg);
       },
 
-      sendMarker(to_jid, id, type) {
+      sendMarker(to_jid, id, type, msg_type) {
         const stanza = converse_chat_$msg({
           'from': _converse.connection.jid,
           'id': converse_chat_u.getUniqueId(),
           'to': to_jid,
-          'type': 'chat'
+          'type': msg_type ? msg_type : 'chat'
         }).c(type, {
           'xmlns': converse_chat_Strophe.NS.MARKERS,
           'id': id
@@ -56290,6 +56336,7 @@ converse_core.plugins.add('converse-chat', {
 
       handleChatMarker(stanza, from_jid) {
         const to_bare_jid = converse_chat_Strophe.getBareJidFromJid(stanza.getAttribute('to'));
+        const from_bare_jid = converse_chat_Strophe.getBareJidFromJid(from_jid);
 
         if (to_bare_jid !== _converse.bare_jid) {
           return false;
@@ -56308,7 +56355,7 @@ converse_core.plugins.add('converse-chat', {
 
           if (marker.nodeName === 'markable') {
             if (this.contact && !converse_chat_u.isMAMMessage(stanza) && !converse_chat_u.isCarbonMessage(stanza)) {
-              this.sendMarker(from_jid, stanza.getAttribute('id'), 'received');
+              this.sendMarker(from_bare_jid, stanza.getAttribute('id'), 'received');
             }
 
             return false;
@@ -56426,6 +56473,14 @@ converse_core.plugins.add('converse-chat', {
             }).root();
         }
 
+        if (message.get('reaction_emoji'))       // BAO
+        {
+            stanza.c("reactions", {
+                'xmlns': converse_chat_Strophe.NS.REACTION,
+                'id': message.get('reaction_id')
+            }).c('reaction').t(message.get('reaction_emoji')).root();
+        }
+
         (message.get('references') || []).forEach(reference => {
           const attrs = {
             'xmlns': converse_chat_Strophe.NS.REFERENCE,
@@ -56473,10 +56528,10 @@ converse_core.plugins.add('converse-chat', {
         {
             const key = text.split("\n")[0];
 
-            if (__origins[key])
+            if (padeapi.origins[key])
             {
-                attach_to = __origins[key];
-                delete __origins[key];
+                attach_to = padeapi.origins[key];
+                delete padeapi.origins[key];
             }
         }
 
@@ -56697,21 +56752,42 @@ converse_core.plugins.add('converse-chat', {
        * @private
        * @param {_converse.Message} message
        */
-      incrementUnreadMsgCounter(message) {
+      incrementUnreadMsgCounter(message) {  // BAO issue #119 (converse #1999)
         if (!message || !message.get('message')) {
           return;
         }
 
         if (converse_chat_utils.isNewMessage(message) && this.isHidden()) {
-          this.save({
-            'num_unread': this.get('num_unread') + 1
-          });
-
+           if (this.get('num_unread') == 0) {
+                this.setFirstUnreadMsgId(message);
+           }
+           this.save({'num_unread': this.get('num_unread') + 1});
           _converse.incrementMsgCounter();
         }
       },
 
+      setFirstUnreadMsgId (message) { // BAO issue #119 (converse #1999)
+        this.clearActiveFirstUnreadMsgId();
+        message.save("first_unread", true);
+        this.save({'first_unread_id': message.get('id')});
+      },
+
+      clearActiveFirstUnreadMsgId() {
+        const first_unread_id = this.get('first_unread_id');
+        if (first_unread_id) {
+          const msg = this.messages.get(first_unread_id);
+          if (msg) msg.save("first_unread", false);
+        }
+      },
+
       clearUnreadMsgCounter() {
+        if (this.get('num_unread') > 0) {
+            const msg = this.messages.last();
+            if (msg) {
+                const from_jid = converse_chat_Strophe.getBareJidFromJid(msg.get('from'));
+                this.sendMarker(from_jid, msg.get('msgid'), 'displayed', msg.get('type'));
+            }
+        }
         converse_chat_u.safeSave(this, {
           'num_unread': 0
         });
@@ -58207,6 +58283,7 @@ converse_core.plugins.add('converse-emoji', {
     _converse.api.settings.update({
       'emoji_image_path': twemoji_esm.base,
       'emoji_categories': {
+        "recent": ":clock1:",       // BAO
         "smileys": ":grinning:",
         "people": ":thumbsup:",
         "activity": ":soccer:",
@@ -58216,12 +58293,11 @@ converse_core.plugins.add('converse-emoji', {
         "food": ":hotdog:",
         "symbols": ":musical_note:",
         "flags": ":flag_ac:",
-        "racoon": ":racoon:",    // BAO
+        "animals": ":animals:", // BAO
         "mochi": ":mochi:",
         "zemarmot": ":zemarmot:",
         "miho": ":miho:",
         "cuppy": ":cuppy:",
-        "animals": ":animals:",
         "animations": ":animations:",
         "dele": ":dele:",
       },
@@ -58232,6 +58308,7 @@ converse_core.plugins.add('converse-emoji', {
       // strings via converse.initialize, which is before __ is
       // available.
       'emoji_category_labels': {
+        "recent": ___("Recent"),    // BAO
         "smileys": ___("Smileys and emotions"),
         "people": ___("People"),
         "activity": ___("Activities"),
@@ -58241,12 +58318,11 @@ converse_core.plugins.add('converse-emoji', {
         "food": ___("Food and drink"),
         "symbols": ___("Symbols"),
         "flags": ___("Flags"),
-        "racoon": ___("Racoon"), // BAO
+        "animals": ___("Animals"), // BAO
         "mochi": ___("Mochi"),
         "zemarmot": ___("Zemarmot"),
         "miho": ___("Miho"),
         "cuppy": ___("Cuppy"),
-        "animals": ___("Animals"),
         "animations": ___("Animations"),
         "dele": ___("Dele"),
       }
@@ -58379,11 +58455,16 @@ converse_core.plugins.add('converse-emoji', {
        */
 
       addMarkdown (text) {
-        var renderer = new marked.Renderer();
-        markedForms(renderer);
-        var markedText = marked(text.replace(/&gt;+/g, '>'), {renderer: renderer});
-        var checkText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
+        var markedText = text;
 
+        if (window.marked)
+        {
+            var renderer = new marked.Renderer();
+            markedForms(renderer);
+            markedText = marked(text.replace(/&gt;+/g, '>'), {renderer: renderer});
+        }
+
+        var checkText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
         //console.debug("addMarkdown", markedText, checkText, text);
 
         if (markedText.indexOf(checkText) > -1 || markedText.indexOf(text) > -1)
@@ -59585,10 +59666,10 @@ converse_core.plugins.add('converse-muc', {
         {
             const key = text.split("\n")[0];
 
-            if (__origins[key])
+            if (padeapi.origins[key])
             {
-                attach_to = __origins[key];
-                delete __origins[key];
+                attach_to = padeapi.origins[key];
+                delete padeapi.origins[key];
             }
         }
 
@@ -60616,13 +60697,14 @@ converse_core.plugins.add('converse-muc', {
           this.updateMessage(message, original_stanza);
         }
 
+        const attrs = await this.getMessageAttributesFromStanza(stanza, original_stanza);
+        this.handleReaction(stanza, original_stanza, attrs);   // BAO issue #9
+
         if (message || utils_stanza.isReceipt(stanza) || utils_stanza.isChatMarker(stanza)) {
           return _converse.api.trigger('message', {
             'stanza': original_stanza
           });
         }
-
-        const attrs = await this.getMessageAttributesFromStanza(stanza, original_stanza);
 
         if (this.handleRetraction(attrs) || this.handleModeration(attrs) || this.subjectChangeHandled(attrs) || this.ignorableCSN(attrs)) {
           return _converse.api.trigger('message', {
@@ -60758,10 +60840,12 @@ converse_core.plugins.add('converse-muc', {
               return;
             }
 
-            this.messages.create({
-              'type': 'info',
-              message
-            });
+            if (_converse.api.settings.get("muc_show_room_info")) {
+                this.messages.create({
+                  'type': 'info',
+                  message
+                });
+            }
           }
         });
       },
@@ -60979,7 +61063,7 @@ converse_core.plugins.add('converse-muc', {
        * @method _converse.ChatRoom#incrementUnreadMsgCounter
        * @param { XMLElement } - The <messsage> stanza
        */
-      incrementUnreadMsgCounter(message) {
+      incrementUnreadMsgCounter(message) { // BAO issue #119 (converse #1999)
         if (!message) {
           return;
         }
@@ -60991,13 +61075,13 @@ converse_core.plugins.add('converse-muc', {
         }
 
         if (utils_form.isNewMessage(message) && this.isHidden()) {
-          const settings = {
-            'num_unread_general': this.get('num_unread_general') + 1
-          };
+          if (this.get('num_unread_general') == 0) {
+            this.setFirstUnreadMsgId(message);
+          }
+          const settings = {'num_unread_general': this.get('num_unread_general') + 1};
 
           if (this.isUserMentioned(message)) {
             settings.num_unread = this.get('num_unread') + 1;
-
             _converse.incrementMsgCounter();
           }
 
@@ -61006,6 +61090,14 @@ converse_core.plugins.add('converse-muc', {
       },
 
       clearUnreadMsgCounter() {
+        if (this.get('num_unread_general') > 0 || this.get('num_unread') > 0) {
+            const msg = this.messages.last();
+            if (msg) {
+                const from_jid = converse_chat_Strophe.getBareJidFromJid(msg.get('from'));
+                this.sendMarker(from_jid, msg.get('msgid'), 'displayed', msg.get('type'));
+            }
+        }
+
         utils_form.safeSave(this, {
           'num_unread': 0,
           'num_unread_general': 0
@@ -61054,7 +61146,10 @@ converse_core.plugins.add('converse-muc', {
       },
 
       getDisplayName() {
-        return this.get('nick') || this.get('jid');
+        let fullname = undefined;   // BAO
+        const vcard = _converse.vcards.findWhere({'jid': this.get('jid')});
+        if (vcard) fullname = vcard.get('fullname');
+        return fullname || this.get('nick') || this.get('jid');
       },
 
       isMember() {
@@ -64781,10 +64876,16 @@ utils_core.addMentionsMarkup = function (text, references, chatbox) {
   }
 
   const nick = chatbox.get('nick');
-  references.sort((a, b) => b.begin - a.begin).forEach(ref => {
-    const mention = text.slice(ref.begin, ref.end);
+  references.sort((a, b) => b.begin - a.begin).forEach(ref =>
+  {
+    const prefix = text.slice(0, ref.begin);
+    const offset = ((prefix.match(/&lt;/g) || []).length + (prefix.match(/&gt;/g) || []).length) * 3;
+    const begin = parseInt(ref.begin) + parseInt(offset);
+    const end = parseInt(ref.end) + parseInt(offset);
+    const mention = text.slice(begin, end)
     chatbox;
 
+    //console.log("---->WWWWWWWWWWWWW", offset, begin, end, prefix, ref);
     // BAO
 
     let data_mention = "";
@@ -64796,10 +64897,12 @@ utils_core.addMentionsMarkup = function (text, references, chatbox) {
         if (jid) data_mention = ' data-mention="' + mention + '" data-jid="' + jid + '"';
     }
 
+    chatbox;
+
     if (mention === nick) { // BAO
-      text = text.slice(0, ref.begin) + "<span " + data_mention + " class=\"mention mention--self badge badge-info\">".concat(mention, "</span>") + text.slice(ref.end);
+      text = text.slice(0, begin) + "<span " + data_mention + " class=\"mention mention--self badge badge-info\">".concat(mention, "</span>") + text.slice(end);
     } else {
-      text = text.slice(0, ref.begin) + "<span " + data_mention + " class=\"mention\">".concat(mention, "</span>") + text.slice(ref.end);
+      text = text.slice(0, begin) + "<span " + data_mention + " class=\"mention\">".concat(mention, "</span>") + text.slice(end);
     }
   });
   return text;
@@ -65261,6 +65364,10 @@ converse_core.plugins.add('converse-message-view', {
       },
 
       async render() {
+        if (this.model.get('reaction_id')) { // BAO issue #9
+          return this.el;
+        }
+
         const is_followup = converse_message_view_u.hasClass('chat-msg--followup', this.el);
 
         if (this.model.isOnlyChatStateNotification()) {
@@ -65295,7 +65402,7 @@ converse_core.plugins.add('converse-message-view', {
 
         const isValidChange = prop => Object.prototype.hasOwnProperty.call(this.model.changed, prop);
 
-        const props = ['moderated', 'retracted', 'correcting', 'message', 'type', 'upload', 'received', 'editable'];
+        const props = ['moderated', 'retracted', 'correcting', 'message', 'type', 'upload', 'received', 'editable', 'first_unread', 'reactions'];    // BAO issue #9
 
         if (props.filter(isValidChange).length) {
           await this.debouncedRender();
@@ -65349,6 +65456,20 @@ converse_core.plugins.add('converse-message-view', {
         return converse_message_view_u.getOOBURLMarkup(_converse, url);
       },
 
+      // BAO issue #9
+
+      transformReactions(reactions) {
+        let div = '<div>';
+
+        Object.getOwnPropertyNames(reactions).forEach(function(reaction) {
+            const count = reactions[reaction].length;
+            const emoji = converse_core.env.utils.shortnamesToEmojis(reaction);
+            div = div + '<span class="chat-msg__reaction">' + emoji + '&nbsp' + count + '</span>';
+        });
+        div = div + '</div>';
+        return div;
+      },
+
       async transformBodyText(text) {
         /**
          * Synchronous event which provides a hook for transforming a chat message's body text
@@ -65362,10 +65483,7 @@ converse_core.plugins.add('converse-message-view', {
           'Synchronous': true
         });
         text = this.model.isMeCommand() ? text.substring(4) : text;
-        text = xss_default.a.filterXSS(text, {
-          'whiteList': {},
-          'onTag': onTagFoundDuringXSSFilter
-        });
+        text = xss_default.a.filterXSS(text, {'whiteList': {}, 'onTag': onTagFoundDuringXSSFilter});
         text = converse_message_view_u.geoUriToHttp(text, _converse.geouri_replacement);
         text = converse_message_view_u.addMentionsMarkup(text, this.model.get('references'), this.model.collection.chatbox);
         text = converse_message_view_u.addHyperlinks(text);
@@ -65415,14 +65533,23 @@ converse_core.plugins.add('converse-message-view', {
           'occupant': this.model.occupant,
           'pretty_time': time.format(_converse.time_format),
           'retraction_text': is_retracted ? this.getRetractionText() : null,
+          'first_unread': this.model.get('first_unread'),   // BAO issue #119 (converse #1999)
           'roles': roles,
           'time': time.toISOString(),
           'username': this.model.getDisplayName()
         })));
         const url = this.model.get('oob_url');
+        const url_div = msg.querySelector('.chat-msg__media');
 
-        if (url && msg.querySelector('.chat-msg__media')) { // BAO
-          msg.querySelector('.chat-msg__media').innerHTML = this.transformOOBURL(url);
+        if (url && url_div) { // BAO
+          url_div.innerHTML = this.transformOOBURL(url);
+        }
+
+        const reactions = this.model.get('reactions');      // BAO
+        const reactions_div = msg.querySelector('.chat-msg__reactions');
+
+        if (reactions && reactions_div) { // BAO
+          reactions_div.innerHTML = this.transformReactions(reactions);
         }
 
         if (!is_retracted) {
@@ -66159,6 +66286,7 @@ converse_core.plugins.add('converse-chatview', {
         'change input.fileupload': 'onFileSelection',
         'click .chat-msg__action-edit': 'onMessageEditButtonClicked',
         'click .chat-msg__action-retract': 'onMessageRetractButtonClicked',
+        'click .chat-msg__action-react': 'onMessageReactButtonClicked',         // BAO
         'click .chat-msg__action-reply': 'onMessageReplyButtonClicked',         // BAO
         'click .chat-msg__action-forward': 'onMessageForwardButtonClicked',     // BAO
         'click .chat-msg__action-pin': 'onMessagePinButtonClicked',             // BAO
@@ -66744,6 +66872,7 @@ converse_core.plugins.add('converse-chatview', {
 
       async onFormSubmitted(ev) {
         ev.preventDefault();
+        this.model.clearActiveFirstUnreadMsgId();                                 // BAO
         const textarea = this.el.querySelector('.chat-textarea');
         const message_text = this.modifyChatBody(textarea.value.trim());    // BAO
 
@@ -66928,7 +67057,7 @@ converse_core.plugins.add('converse-chatview', {
 
             const replyText = '> ' + prefix + replyMessage;
             this.insertIntoTextArea(replyText + "\n\n", false, false);
-            __origins[replyText] = msgId;
+            padeapi.origins[replyText] = msgId;
         }
       },
 
@@ -66954,6 +67083,54 @@ converse_core.plugins.add('converse-chatview', {
         }
       },
 
+      // BAO
+
+      handleEmojiSelected(value, replace, position) {
+        const reaction = this.model.get('reaction');
+
+        if (reaction) {
+            const msgid = reaction.msgid;
+            const time = reaction.time;
+            this.model.set('reaction', undefined);
+            const message = this.model.messages.findWhere({msgid, time});
+
+            if (message)
+            {
+                if (message.get('type') == 'chat')
+                {
+                    this.model.updateReactions(message, this.model.get('from'), value);
+                }
+                const origin_id = message.get('origin_id');
+                let text = window.getSelection().toString();
+                if (!text || text == "") text = message.get('message');
+                const pos = text.indexOf("\n");
+                text = pos == -1 ? text : text.substring(0, pos);
+                const body = '/me ' + value + ' ' + text;
+
+                const attrs = this.model.getOutgoingMessageAttributes(body);
+                attrs.reaction_id = origin_id;
+                attrs.reaction_emoji = value;
+                this.model.setEditable(attrs, new Date().toISOString());
+                const new_message = this.model.messages.create(attrs);
+                _converse.api.send(this.model.createMessageStanza(new_message));
+           }
+
+        } else {
+            this.insertIntoTextArea(value, replace, false, position);
+        }
+      },
+
+      onMessageReactButtonClicked(ev) { // BAO
+        ev.preventDefault();
+
+        const msg_el = converse_chatview_u.ancestor(ev.target, '.message');
+        const msgid = msg_el.getAttribute('data-msgid');
+        const time = msg_el.getAttribute('data-isodate');
+
+        this.model.set('reaction', {msgid: msgid, time: time});
+        this.toggleEmojiMenu(ev);
+      },
+
       onMessageLikeButtonClicked(ev) { // BAO
         ev.preventDefault();
 
@@ -66968,9 +67145,15 @@ converse_core.plugins.add('converse-chatview', {
         if (message)
         {
             const type = message.get('type');
-            let text = message.get('message');
-            let pos = text.indexOf("\n");
-            text = pos == -1 ? text : text.substring(0, pos);
+
+            let text = window.getSelection().toString();
+
+            if (!text || text == "")
+            {
+                text = message.get('message');
+                let pos = text.indexOf("\n");
+                text = pos == -1 ? text : text.substring(0, pos);
+            }
             postfix = " " + (type == "groupchat" ? nick : "") + ": " + text;
 
             console.debug('onMessageLikeButtonClicked', msgId, from, type);
@@ -67122,31 +67305,6 @@ converse_core.plugins.add('converse-chatview', {
         }
       },
 
-      editLaterMessage() {
-        let message;
-        let idx = this.model.messages.findLastIndex('correcting');
-
-        if (idx >= 0) {
-          this.model.messages.at(idx).save('correcting', false);
-
-          while (idx < this.model.messages.length - 1) {
-            idx += 1;
-            const candidate = this.model.messages.at(idx);
-
-            if (candidate.get('editable')) {
-              message = candidate;
-              break;
-            }
-          }
-        }
-
-        if (message) {
-          this.insertIntoTextArea(message.get('message'), true, true);
-          message.save('correcting', true);
-        } else {
-          this.insertIntoTextArea('', true, false);
-        }
-      },
 
       editEarlierMessage() {
         let message;
@@ -67169,10 +67327,37 @@ converse_core.plugins.add('converse-chatview', {
         message = message || this.getOwnMessages().reverse().find(m => m.get('editable'));
 
         if (message) {
-          this.insertIntoTextArea(message.get('message'), true, true);
+          this.insertIntoTextArea(converse_chatview_u.prefixMentions(message), true, true);
           message.save('correcting', true);
         }
       },
+
+      editLaterMessage() {
+        let message;
+        let idx = this.model.messages.findLastIndex('correcting');
+
+        if (idx >= 0) {
+          this.model.messages.at(idx).save('correcting', false);
+
+          while (idx < this.model.messages.length - 1) {
+            idx += 1;
+            const candidate = this.model.messages.at(idx);
+
+            if (candidate.get('editable')) {
+              message = candidate;
+              break;
+            }
+          }
+        }
+
+        if (message) {
+          this.insertIntoTextArea(converse_chatview_u.prefixMentions(message), true, true);
+          message.save('correcting', true);
+        } else {
+          this.insertIntoTextArea('', true, false);
+        }
+      },
+
 
       inputChanged(ev) {
         const height = ev.target.scrollHeight + 'px';
@@ -67472,7 +67657,12 @@ converse_core.plugins.add('converse-chatview', {
         }
 
         if (converse_chatview_u.isVisible(this.content) && !this.model.get('scrolled')) {
-          this.content.scrollTop = this.content.scrollHeight;
+            if ((this.content.scrollTop === 0 || this.content.scrollTop < this.content.scrollHeight/2)) {
+                converse_chatview_u.removeClass('smooth-scroll', this.content);
+            } else if (_converse.api.settings.get('animate')) {
+                converse_chatview_u.addClass('smooth-scroll', this.content);
+            }
+            this.content.scrollTop = this.content.scrollHeight;
         }
       },
 
@@ -67494,7 +67684,6 @@ converse_core.plugins.add('converse-chatview', {
         _converse.api.trigger('chatBoxScrolledDown', {
           'chatbox': this.model
         }); // TODO: clean up
-
       },
 
       onWindowStateChanged(state) {
@@ -72910,20 +73099,22 @@ converse.plugins.add('converse-emoji-views', {
         this.emoji_dropdown.toggle();
       },
 
-      createEmojiPicker() {
+      async createEmojiPicker() {   // BAO
         if (this.emoji_picker_view) {
           this.insertEmojiPicker();
           return;
         }
 
-        if (!_converse.emojipicker) {
+        if (!_converse.emojipicker && _converse.emojis.json) {
+          _converse.emojis.json.recent = {}; // BAO
           const id = "converse.emoji-".concat(_converse.bare_jid);
           _converse.emojipicker = new _converse.EmojiPicker({
             'id': id
           });
           _converse.emojipicker.browserStorage = _converse.createStore(id);
-
-          _converse.emojipicker.fetch();
+          await _converse.emojipicker.fetch();                  // BAO
+          const recent = _converse.emojipicker.get('recent');
+          if (recent) _converse.emojis.json.recent = recent;
         }
 
         this.emoji_picker_view = new _converse.EmojiPickerView({
@@ -72944,6 +73135,7 @@ converse.plugins.add('converse-emoji-views', {
 
       async toggleEmojiMenu(ev) {
         ev.stopPropagation();
+        await this.emoji_picker_view.render();  // BAO
         await this.createEmojiDropdown();
         this.emoji_dropdown.toggle();
         this.emoji_picker_view.setScrollPosition();
@@ -73145,7 +73337,8 @@ converse.plugins.add('converse-emoji-views', {
           'autocompleting': null,
           'position': null
         });
-        this.chatview.insertIntoTextArea(value, replace, false, position);
+
+        this.chatview.handleEmojiSelected(target.getAttribute('data-emoji'), replace, position);
 
         if (this.chatview.emoji_dropdown) {
           this.chatview.emoji_dropdown.toggle();
@@ -73153,6 +73346,7 @@ converse.plugins.add('converse-emoji-views', {
 
         this.filter('', true);
         this.disableArrowNavigation();
+        this.saveEmoji(value);        // BAO
       },
 
       onEnterPressed(ev) {
@@ -73280,6 +73474,21 @@ converse.plugins.add('converse-emoji-views', {
         }
       },
 
+      // BAO
+
+      saveEmoji(value) {
+        const emoji = _converse.emojis_list.filter(e => _converse.FILTER_CONTAINS(e.sn, value));
+        const item = emoji[0];
+
+        if (item.c != 'recent')
+        {
+            item.c = 'recent';
+            _converse.emojis.json.recent[value] = item;
+            _converse.emojipicker.save('recent', _converse.emojis.json.recent);
+            this.render();
+        }
+      },
+
       insertEmoji(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -73290,9 +73499,12 @@ converse.plugins.add('converse-emoji-views', {
           'autocompleting': null,
           'position': null
         });
-        this.chatview.insertIntoTextArea(target.getAttribute('data-emoji'), replace, false, position);
-        this.chatview.emoji_dropdown.toggle();
+        this.chatview.handleEmojiSelected(target.getAttribute('data-emoji'), replace, position);
+        if (this.chatview.emoji_dropdown) {
+            this.chatview.emoji_dropdown.toggle();
+        }
         this.filter('', true);
+        this.saveEmoji(target.getAttribute('data-emoji'));  // BAO
       }
 
     });
@@ -74391,6 +74603,7 @@ converse_core.plugins.add('converse-muc-views', {
       'show_retraction_warning': true,
       'muc_disable_slash_commands': false,
       'muc_show_join_leave': true,
+      'muc_show_room_info': true,               // BAO
       'muc_show_join_leave_status': true,
       'muc_mention_autocomplete_min_chars': 0,
       'muc_mention_autocomplete_filter': 'contains',
@@ -74950,6 +75163,7 @@ converse_core.plugins.add('converse-muc-views', {
         'change input.fileupload': 'onFileSelection',
         'click .chat-msg__action-edit': 'onMessageEditButtonClicked',
         'click .chat-msg__action-retract': 'onMessageRetractButtonClicked',
+        'click .chat-msg__action-react': 'onMessageReactButtonClicked',         // BAO
         'click .chat-msg__action-reply': 'onMessageReplyButtonClicked',         // BAO
         'click .chat-msg__action-forward': 'onMessageForwardButtonClicked',     // BAO
         'click .chat-msg__action-pin': 'onMessagePinButtonClicked',             // BAO
@@ -75166,7 +75380,7 @@ converse_core.plugins.add('converse-muc-views', {
 
       getAutoCompleteList() {
         return this.model.occupants.filter('nick').map(o => ({
-          'label': o.get('nick'),
+          'label': o.getDisplayName(),  // BAO
           'value': "@".concat(o.get('nick'))
         }));
       },
@@ -78718,7 +78932,7 @@ converse_core.plugins.add('converse-omemo', {
     });
     _converse.Device = converse_omemo_Backbone.Model.extend({
       defaults: {
-        'trusted': UNDECIDED,
+        'trusted': TRUSTED, // BAO
         'active': true
       },
 

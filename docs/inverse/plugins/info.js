@@ -80,7 +80,7 @@
                     var jid = view.model.get("jid");
                     var id = view.model.get("box_id");
 
-                    addToolbarItem(view, id, "pade-info-" + id, '<a class="fas fa-info" title="Information"></a>');
+                    padeapi.addToolbarItem(view, id, "pade-info-" + id, '<a class="fas fa-info" title="Information"></a>');
 
                     var occupants = view.el.querySelector('.occupants');
 
@@ -146,7 +146,7 @@
                             if (!data) data = {};
                             if (!data[feedId]) data[feedId] = {};
 
-                            var feed = {path: match[2], url: chrome.pade ? "https://" + bgWindow.pade.server + "/pade/download?url=" + match[2] : match[2]};
+                            var feed = {path: match[2], url: chrome.pade ? "https://" + getSetting("server") + "/pade/download?url=" + match[2] : match[2]};
 
                             fetch(feed.url).then(function(response)
                             {
@@ -289,7 +289,7 @@
                     var urlName = bgWindow.pade.collabDocs[urls[i]];
                     console.debug('createMylinks', urls[i], urlName);
 
-                    if (urlName != "Video conferencing web client")
+                    if (bgWindow && urlName != "Video conferencing web client")
                     {
                         if (isH5PURL(urls[i]))
                         {
@@ -325,7 +325,7 @@
                 {
                     if (htmlArray[i].ele)
                     {
-                        var element = __newElement('div', null, htmlArray[i].html);
+                        var element = padeapi.__newElement('div', null, htmlArray[i].html);
                         htmlArray[i].ele.insertAdjacentElement('afterEnd', element);
 
                         element.addEventListener('click', function(evt)
@@ -379,7 +379,7 @@
                     console.debug('createBroadcastEndpoints', jid, name);
 
                     var html = '<li title="' + jid + '">' + name + '</li>';
-                    var element = __newElement('div', null, html);
+                    var element = padeapi.__newElement('div', null, html);
 
                     element.addEventListener('click', function(evt)
                     {
@@ -430,7 +430,7 @@
                         html += '<input id="info_active_workgroup-' + id + '" type="radio" ' + checked + ' value="' + jid + '"/>&nbsp;' + name + '<br/>';
                     }
 
-                    var element = __newElement('div', null, html);
+                    var element = padeapi.__newElement('div', null, html);
 
                     element.addEventListener('click', function(evt)
                     {
@@ -486,7 +486,7 @@
                     }
                     html += '</table>';
 
-                    queueDetail.insertAdjacentElement('afterEnd', __newElement('div', null, html));
+                    queueDetail.insertAdjacentElement('afterEnd', padeapi.__newElement('div', null, html));
                 }
 
                 var keys = Object.getOwnPropertyNames(fastpath.conversations);
@@ -505,7 +505,7 @@
                         console.debug("createWorkgroups conversation", conversation);
 
                         var html = '<li title="' + conversation.question + '">' + conversation.username + ' (' + conversation.agent + ')</li>';
-                        var element = __newElement('div', null, html);
+                        var element = padeapi.__newElement('div', null, html);
 
                         element.addEventListener('click', function(evt)
                         {
@@ -1137,7 +1137,7 @@
                 const bosh = "wss://" + getSetting("server") + "/ws/";
 
                 const query = `audio=true&trace=true&pwd=${password}&username=${username}&name=${name}&avatar=${avatar}&docurl=${url}&docname=${file}&domain=${domain}&bosh=${bosh}`;
-                bgWindow.openWebAppsWindow(chrome.extension.getURL("akowe/index.html?" + query), null, 1400, 900);
+                if (bgWindow) bgWindow.openWebAppsWindow(chrome.extension.getURL("akowe/index.html?" + query), null, 1400, 900);
             }
             else {  // insert into textarea
                 replyInverseChat(url);
@@ -1150,7 +1150,7 @@
 
     var renderMedia = function (id, eleName, urls, check)
     {
-        urls.sort(sortUrls);
+        urls = urls.sort(sortUrls);
 
         var count = document.getElementById(id + "-" + eleName + "-count");
         var detail = document.getElementById(id + "-" + eleName + "-details");
@@ -1197,7 +1197,7 @@
 
     var renderMeeting = function (id, meetings)
     {
-        meetings.sort(sortUrls);
+        meetings = meetings.sort(sortUrls);
         var summary = document.getElementById(id + "-meeting-recordings");
 
         if (summary && meetings.length > 0)

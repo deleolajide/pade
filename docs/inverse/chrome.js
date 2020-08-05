@@ -2,7 +2,7 @@ if (!window.chrome || !window.chrome.extension)
 {
     var padeName = "pade";
     var appName = "Pade";
-    var appVer = "1.6.0";
+    var appVer = "1.6.4";
     var appLanguage = "en";
     var badgeBackgroundColor = {color: '#ff0000'};
     var i18nMessages = {};
@@ -55,7 +55,7 @@ if (!window.chrome || !window.chrome.extension)
                     {
                         data[query] = JSON.parse(window.localStorage[query]);
                     }
-                    console.debug("storage.local.get", data);
+                    //console.debug("storage.local.get", data);
                     if (callback) callback(data);
                 },
                 set : function(data, callback) {
@@ -66,15 +66,15 @@ if (!window.chrome || !window.chrome.extension)
                     {
                         window.localStorage[keys[0]] = JSON.stringify(data[keys[0]]);
                     }
-                    console.debug("storage.local.set", data);
+                    //console.debug("storage.local.set", data);
                     if (callback) callback(data);
                 },
                 clear : function() {
-                    console.debug("storage.local.clear");
+                    //console.debug("storage.local.clear");
                     localStorage.clear();
                 },
                 remove : function(key) {
-                    console.debug("storage.local.remove", key);
+                    //console.debug("storage.local.remove", key);
                     localStorage.removeItem(key);
                 }
             }
@@ -113,6 +113,9 @@ if (!window.chrome || !window.chrome.extension)
             remove: function(id) {
 
             },
+            getCurrent: function(obj) {
+
+            }
         },
 
         extension : {
@@ -121,7 +124,7 @@ if (!window.chrome || !window.chrome.extension)
             },
 
             getBackgroundPage: function() {
-                return top;
+                return parent;
             },
 
             getViews: function(filter) {
@@ -326,22 +329,16 @@ function getSetting(name, defaultValue)
 {
     var localStorage = window.localStorage
     //console.debug("getSetting", name, defaultValue, localStorage["store.settings." + name]);
-
-    if (window.pade)
-    {
-        if (name == "username") return window.pade.username;
-        if (name == "password") return window.pade.password;
-        if (name == "domain") return window.pade.domain;
-        if (name == "server") return window.pade.server;
-    }
-
     var value = defaultValue;
 
     if (localStorage["store.settings." + name])
     {
-        value = JSON.parse(localStorage["store.settings." + name]);
-
-        if (name == "password") value = getPassword(value, localStorage);
+        try {
+            value = JSON.parse(localStorage["store.settings." + name]);
+            if (name == "password") value = getPassword(value, localStorage);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     return value;
